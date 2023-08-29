@@ -84,4 +84,22 @@ def randoms(request):
     return render(request,"encyclopedia/read.html",{
         "html":html
     })
-    
+
+def search(request):
+    if request.method=="POST":
+        s_info=request.POST
+        
+        
+        searchdata=s_info["q"]
+        result=util.get_entry(searchdata)
+        if result:
+            result=markdown2.markdown(result)
+        if result:
+            return render(request,"encyclopedia/search.html",{
+            "html":result
+        })
+
+            
+        return render(request,"encyclopedia/search.html",{
+                "html":"NONE"
+            })
