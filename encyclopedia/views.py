@@ -18,8 +18,8 @@ def listofmds():
 
 class entryform(forms.Form):
     
-    title=forms.CharField(widget=forms.TextInput(attrs={"class":"titlef"}))
-    content=forms.CharField(widget=forms.TextInput(attrs={"class":"contentf"}))
+    title=forms.CharField(widget=forms.Textarea(attrs={"class":"titlef"}))
+    content=forms.CharField(widget=forms.Textarea(attrs={"class":"contentf"}))
 
 def convert(file):
     f=open(file,"r")
@@ -29,12 +29,12 @@ def convert(file):
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
-        "entries": entries
+        "entries": util.list_entries()
     })
 
 def wiki(request):
     return render(request,"encyclopedia/wiki.html",{
-        "entries": entries
+        "entries": util.list_entries()
 
     })
 
