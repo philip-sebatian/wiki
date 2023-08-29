@@ -1,0 +1,15 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Encyclopedia
+{% endblock %}
+
+{% block body %}
+<form action="{% url 'add'%}" method="POST" style="display: flex;flex-direction: column;justify-content: center;align-items: center; gap: 30px;">
+    {%csrf_token%}
+    {{form}}
+    <button type="submit" style="width: 100px;"> submit</button>
+</form>
+    
+
+{% endblock %}
