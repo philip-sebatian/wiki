@@ -94,6 +94,7 @@ def randoms(request):
     })
 
 def search(request):
+    similar=[]
     if request.method=="POST":
         s_info=request.POST
         
@@ -107,7 +108,14 @@ def search(request):
             "html":result
         })
 
-            
+        for i in util.list_entries():
+            if searchdata.lower() in i.lower() :
+                similar.append(i)
+
+        if len(similar)!=0:
+            return render(request,"encyclopedia/searchsim.html",{
+            "html":similar
+        })
         return render(request,"encyclopedia/search.html",{
                 "html":"NONE"
             })

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    <form style="display: flex;flex-direction: column;justify-content: center;align-items: center; gap: 30px;" action="{%url 'edited'%}" method="POST">
+    <form style="display: flex;flex-direction: column;justify-content: center;align-items: center; gap: 30px;" action="{%url 'wiki'%}" method="POST">
         {%csrf_token%}
         {{form}}
         <button type="submit">edit</button>
