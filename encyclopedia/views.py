@@ -38,10 +38,22 @@ def index(request):
     })
 
 def wiki(request):
+    if request.method=='POST':
+        f=entryform(request.POST)
+        if f.is_valid():
+            data=f
+            data=data.cleaned_data
+            x=data["content"]
+            with open("entries/"+data['title']+".md",'w+') as a:
+                a.write(x)
+            return render(request,"encyclopedia/wiki.html",{
+            "entries":util.list_entries()
+            })
     return render(request,"encyclopedia/wiki.html",{
         "entries": util.list_entries()
 
     })
+
 
 def read(request,name):
     
@@ -132,16 +144,5 @@ def edit(request):
                 'form':entryform2({"title":str(title),'content':str(content)})
         })
     
-def edited(reqeust):
-    if reqeust.method=='POST':
-        f=entryform(reqeust.POST)
-        if f.is_valid():
-            data=f
-            data=data.cleaned_data
-            x=data["content"]
-            with open("entries/"+data['title']+".md",'w+') as a:
-                a.write(x)
-            return render(reqeust,"encyclopedia/wiki.html",{
-            "entries":util.list_entries()
-            })
-        
+def edited(request):
+    return
