@@ -1,0 +1,15 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Encyclopedia
+{% endblock %}
+
+{% block body %}
+<ul>
+    <h1 style=" font-family: 'Black Ops One', cursive;font-family: 'Roboto Mono', monospace;font-size: 60px;color: black; ;">DID YOU MEAN....</h1>
+    {%for i in html%}
+        <li><a href="{%url 'name' name=i %}" style=" font-family: 'Black Ops One', cursive;font-family: 'Roboto Mono', monospace;font-size: 30px;color: black; text-decoration: none;">{{i}}</a></li>
+    {%endfor%}
+</ul>
+
+{% endblock %}
