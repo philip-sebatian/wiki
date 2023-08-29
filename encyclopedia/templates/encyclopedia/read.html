@@ -6,5 +6,11 @@
 
 {% block body %}
     {{html|safe}}
+    <form action="{%url 'edit'%}" method="POST">
+        {%csrf_token%}
+        <input type="hidden" value="{{markup}}" name="content">
+        <input type="hidden" value="{{name}}" name="title">
+        <button type="submit">edit</button>
 
+    </form>
 {% endblock %}

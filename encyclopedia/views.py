@@ -21,6 +21,11 @@ class entryform(forms.Form):
     title=forms.CharField(widget=forms.Textarea(attrs={"class":"titlef"}))
     content=forms.CharField(widget=forms.Textarea(attrs={"class":"contentf"}))
 
+class entryform2(forms.Form):
+    
+    title=forms.CharField(widget=forms.Textarea(attrs={"class":"titlef",'readonly':'readonly'}))
+    content=forms.CharField(widget=forms.Textarea(attrs={"class":"contentf"}))
+
 def convert(file):
     f=open(file,"r")
     x=f.read()
@@ -41,12 +46,15 @@ def wiki(request):
 def read(request,name):
     
     html="entries/"+str(name)+".md"
+    with open(html,'r') as f:
+        markup=f.read()
+
     html=convert(html)
     
         
     
     return render(request,"encyclopedia/read.html",{
-        "html":html
+        "html":html,"name":name,'markup':markup
         
     })
 
@@ -103,3 +111,29 @@ def search(request):
         return render(request,"encyclopedia/search.html",{
                 "html":"NONE"
             })
+    
+def edit(request):
+        
+    
+    data=request.POST
+   
+    title=data.get('title')
+    content=data.get("content")
+
+    return render(request,"encyclopedia/edit.html",{
+                'form':entryform2({"title":str(title),'content':str(content)})
+        })
+    
+def edited(reqeust):
+    if reqeust.method=='POST':
+        f=entryform(reqeust.POST)
+        if f.is_valid():
+            data=f
+            data=data.cleaned_data
+            x=data["content"]
+            with open("entries/"+data['title']+".md",'w+') as a:
+                a.write(x)
+            return render(reqeust,"encyclopedia/wiki.html",{
+            "entries":util.list_entries()
+            })
+        
