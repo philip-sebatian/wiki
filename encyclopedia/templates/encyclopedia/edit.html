@@ -5,9 +5,10 @@
 {% endblock %}
 
 {% block body %}
-    <form style="display: flex;flex-direction: column;justify-content: center;align-items: center; gap: 30px;" action="{%url 'wiki'%}" method="POST">
+    <form style="display: flex;flex-direction: column;justify-content: center;align-items: center; gap: 30px;" action="{%url 'name' name=titlemd%}" method="POST">
         {%csrf_token%}
         {{form}}
+        <input type="hidden" value="{{titlemd}}" name="title">
         <button type="submit">edit</button>
     </form>
 {% endblock %}

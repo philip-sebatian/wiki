@@ -56,10 +56,29 @@ def wiki(request):
 
 
 def read(request,name):
+    if request.method=="POST":
+        data=request.POST
+        title=data.get('title')
+        x=data.get("content")
+        with open("entries/"+data['title']+".md",'w+') as a:
+            a.write(x)
+        html=convert("entries/"+title+".md")
+        return render(request,"encyclopedia/read.html",{
+            "html":html,'name':title,'markup':x
+        })
+
     
     html="entries/"+str(name)+".md"
-    with open(html,'r') as f:
-        markup=f.read()
+    try:
+        with open(html,'r') as f:
+            markup=f.read()
+    except:
+        return render(request,"encyclopedia/error.html",{
+        "html":"ERROR ENTRY NOT FOUND","name":name,
+        
+    })
+
+
 
     html=convert(html)
     
@@ -79,21 +98,24 @@ def add(request):
             data=data.cleaned_data
             title=data["title"]
             if title in listofmds():
-                return render(request,"encyclopedia/edit.html",{
-            "form":entryform()
+                return render(request,"encyclopedia/error.html",{
+            "html":"ENTRY ALREASY EXISTS"
         })
                 
             content=str(data['content'])
             f=open("entries/"+str(title)+".md","w+")
             f.write(content)
-            f.close
-            return render(request,"encyclopedia/edit.html",{
-                "form":entryform()
-            })
-    return render(request,"encyclopedia/edit.html",{
+            f.close()
+            
+            x=convert("entries/"+title+".md")
+            
+            
+            return render(request,"encyclopedia/wiki.html",{
+            "html":x,"name":title,'markup':content
+        })
+    return render(request,"encyclopedia/add.html",{
             "form":entryform()
         })
-
         
 
 def randoms(request):
@@ -141,8 +163,6 @@ def edit(request):
     content=data.get("content")
 
     return render(request,"encyclopedia/edit.html",{
-                'form':entryform2({"title":str(title),'content':str(content)})
+                'form':entryform2({"title":str(title),'content':str(content)}),"titlemd":title,'name':title
         })
     
-def edited(request):
-    return
