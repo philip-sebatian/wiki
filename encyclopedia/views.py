@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django import forms
-
+from django.http import HttpResponseRedirect
 from . import util
 import markdown2
 import os 
@@ -90,6 +90,7 @@ def read(request,name):
     })
 
 def add(request):
+    curr_entries=util.list_entries()
     if request.method=="POST":
         data=entryform(request.POST)
         
@@ -102,20 +103,22 @@ def add(request):
             "html":"ENTRY ALREASY EXISTS"
         })
                 
-            content=str(data['content'])
-            f=open("entries/"+str(title)+".md","w+")
-            f.write(content)
-            f.close()
-            
-            x=convert("entries/"+title+".md")
-            
-            
-            return render(request,"encyclopedia/wiki.html",{
-            "html":x,"name":title,'markup':content
-        })
+            if title not in listofmds():
+                content=str(data['content'])
+                f=open("entries/"+str(title)+".md","w+")
+                f.write(content)
+                f.close()
+                
+                x=convert("entries/"+title+".md")
+                
+                
+                return render(request,"encyclopedia/wiki.html",{
+                "html":x,"name":title,'markup':content
+            })
     return render(request,"encyclopedia/add.html",{
             "form":entryform()
         })
+
         
 
 def randoms(request):
@@ -151,7 +154,7 @@ def search(request):
             "html":similar
         })
         return render(request,"encyclopedia/search.html",{
-                "html":"NONE"
+                "html":"NO SIMILAR ENTRIES"
             })
     
 def edit(request):
